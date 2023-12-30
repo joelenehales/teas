@@ -25,6 +25,10 @@ Features:
 
 Installation
 ------------
+
+**Distribution is currently delayed due to new user registration to PyPI being
+disabled. Please check back later.**
+
 It is recommended to install ``teas`` in a new environment to avoid
 version conflicts with other packages. To do this, run:
 
