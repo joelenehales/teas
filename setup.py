@@ -24,10 +24,11 @@ if __name__ == "__main__":
         install_requires=INSTALL_REQUIRES,
         keywords=KEYWORDS,
         classifiers= [
-            "Development Status :: 3 - Alpha",
+            "Development Status :: 4 - Beta",
+            "License :: OSI Approved :: MIT License",
             "Intended Audience :: Science/Research",
+            "Topic :: Scientific/Engineering :: Astronomy",
             "Programming Language :: Python :: 3",
-            "Operating System :: MacOS :: MacOS X",
-            "Operating System :: Microsoft :: Windows",
+            "Operating System :: OS Independent"
         ]
     )

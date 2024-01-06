@@ -2,6 +2,10 @@
 ``teas`` - Tools for the Extraction and Analysis of Spectra from JWST observations
 ==================================================================================
 
+.. image:: https://img.shields.io/pypi/v/teas?style=flat&logo=pypi&logoColor=%23ffd242&color=%23336c9d
+   :target: https://pypi.org/project/teas/
+   :alt: PyPI - Version
+
 .. image:: https://img.shields.io/badge/powered%20by-AstroPy-orange.svg?style=flat
     :target: https://www.astropy.org
     :alt: Powered by Astropy
