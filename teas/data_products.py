@@ -113,6 +113,7 @@ class JWST_DataProduct():
         self.data_hdu = None       # Cube/image data, as an astropy ImageHDU
         self.data = None           # Cube/image data, as a numpy array
         self.err_hdu = None        # Cube/image data errors, as an astropy ImageHDU
+        self.err = None            # Cube/image data errors, as a numpy array
         self.fits_header = None    # Astropy FITS header 
 
 
@@ -127,6 +128,7 @@ class JWST_DataProduct():
         self.data_hdu = self.hdu_list[1]
         self.data = self.data_hdu.data
         self.err_hdu = self.hdu_list[2]
+        self.err = self.err_hdu.data
         self.fits_header = self.data_hdu.header
 
         if "MJD-OBS" not in self.fits_header:   # Observation time under this heading required for WCS

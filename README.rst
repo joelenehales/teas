@@ -35,12 +35,12 @@ version conflicts with other packages. To do this, run:
 
 .. code-block:: bash
 
-   conda create -n my-env python=3.9
+   conda create --name teas-env python=3.9
 
 
 Then, activate the environment and install the package. The latest released version can be installed with pip:
 
 .. code-block:: bash
 
-  conda activate my-env
+  conda activate teas-env
   pip install teas --upgrade

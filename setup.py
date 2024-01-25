@@ -3,7 +3,7 @@ import os
 import codecs
 
 KEYWORDS = ["python","astronomy","jwst","spectroscopy"]
-INSTALL_REQUIRES = ["jdaviz>=3.1","reproject>=0.9.1"]
+INSTALL_REQUIRES = ["jdaviz==3.1","reproject>=0.9.1","chardet","asdf==2.13.0"]
 
 CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
@@ -14,7 +14,7 @@ def read(*parts):
 if __name__ == "__main__":
     setup(
         name="teas", 
-        version="0.1.0",
+        version="0.1.1",
         author="Joelene Hales",
         author_email="<joelenehales@bell.net>",
         url="https://github.com/joelenehales/teas",
