@@ -26,6 +26,8 @@ class JWST_DataProduct():
 
     Attributes
     ----------
+    filepath : str
+        Filepath to FITS file with data cube/image data.
     hdu_list : class 'astropy.io.fits.HDUList'
         List of all HDUs in the FITS file, if data was given in the form of a
         filepath.
@@ -35,6 +37,8 @@ class JWST_DataProduct():
         Cube/image data errors in the form of an astropy ImageHDU object
     data : numpy.ndarray
         Cube/image data in the form of a numpy array
+    err : numpy.ndarray
+        Cube/image data errors in the form of a numpy array
     fits_header : class 'astropy.io.fits.Header'
         FITS header for the data
     wcs : class 'astropy.wcs.WCS'
@@ -108,7 +112,7 @@ class JWST_DataProduct():
         """
 
         # Initialize attributes
-        self.filename = filepath   # Filepath to the original FITs file
+        self.filepath = filepath   # Filepath to the original FITs file
         self.hdu_list = None       # All HDUs in the FITS file, if data given as a filepath
         self.data_hdu = None       # Cube/image data, as an astropy ImageHDU
         self.data = None           # Cube/image data, as a numpy array
@@ -335,15 +339,14 @@ class JWST_DataProduct():
         if self.data_product_dimensions == 2:  # Image
 
             # Create copy of object
-            reprojected_object = Image(filepath=self.filepath,filter_chan=self.filter_chan,label=self.label)
+            reprojected_object = Image(filepath=self.filepath,filt=self.filter_chan,label=self.label)
 
             # Define WCS to reproject onto as the celestial WCS of the other data product
             reproject_header = other_data_product.fits_header
             reproject_wcs = other_data_product.celestial_wcs
 
-            # Reproject image data and errors onto this WCS
+            # Reproject image data onto this WCS
             reprojected_data = reproject_interp(self.data_hdu,reproject_wcs,reproject_wcs.array_shape,return_footprint=False)
-            reprojected_err = reproject_interp(self.err_hdu,reproject_wcs,reproject_wcs.array_shape,return_footprint=False)
 
 
         else:  # Data cube
@@ -380,19 +383,16 @@ class JWST_DataProduct():
             # Define this header as a WCS
             reproject_wcs = WCS(reproject_header)
 
-            # Reproject data cube + errors onto this WCS
+            # Reproject data cube onto this WCS
             reprojected_data = reproject_interp(self.data_hdu,reproject_wcs,reproject_wcs.array_shape, return_footprint=False)
-            reprojected_err= reproject_interp(self.err_hdu,reproject_wcs,reproject_wcs.array_shape,return_footprint=False)
 
 
         # Set attributes to reprojected data
         reprojected_object.data_hdu.data = reprojected_data
         reprojected_object.data = reprojected_data
-        reprojected_object.err_hdu.data = reprojected_err
         reprojected_object.fits_header = reproject_header
         reprojected_object.wcs = reproject_wcs
         reprojected_object.celestial_wcs = reproject_wcs.celestial
-
 
         # Update header in each HDU to use thereprojected WCS
         hdu_list = reprojected_object.hdu_list
@@ -723,16 +723,20 @@ class SpectralDataCube(JWST_DataProduct):
 
     Attributes
     ----------
+    filepath : str
+        Filepath to FITS file with data cube data.
     data_hdu : class 'astropy.io.fits.hdu.image.ImageHDU'
-        Cube/image data in the form of an astropy ImageHDU object
+        Cube data in the form of an astropy ImageHDU object
     cube_hdu : class 'astropy.io.fits.hdu.image.ImageHDU'
         Alias for data_hdu
     data : numpy.ndarray
-        Cube/image data in the form of a numpy array
+        Cube data in the form of a numpy array
     cube : numpy.ndarray
         Alias for data
     err_hdu : class 'astropy.io.fits.hdu.image.ImageHDU'
         Cube/image data errors in the form of an astropy ImageHDU object
+    err : numpy.ndarray
+        Cube data errors in the form of a numpy array
     fits_header : class 'astropy.io.fits.Header'
         FITS header for the data
     wcs : class 'astropy.wcs.WCS'
@@ -994,16 +998,20 @@ class Image(JWST_DataProduct):
 
     Attributes
     ----------
+    filepath : str
+        Filepath to FITS file with data cube data.
     data_hdu : class 'astropy.io.fits.hdu.image.ImageHDU'
-        Cube/image data in the form of an astropy ImageHDU object
+        Image data in the form of an astropy ImageHDU object
     image_hdu : class 'astropy.io.fits.hdu.image.ImageHDU'
         Alias for data_hdu
     data : numpy.ndarray
-        Cube/image data in the form of a numpy array
+        Image data in the form of a numpy array
     image : numpy.ndarray
         Alias for data
     err_hdu : class 'astropy.io.fits.hdu.image.ImageHDU'
-        Cube/image data errors in the form of an astropy ImageHDU object
+        Image data errors in the form of an astropy ImageHDU object
+    err : numpy.ndarray
+        Image data errors in the form of a numpy array
     fits_header : class 'astropy.io.fits.Header'
         FITS header for the data
     wcs : class 'astropy.wcs.WCS'
