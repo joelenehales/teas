@@ -19,6 +19,7 @@ from photutils.aperture import CircularAperture
 from specutils import Spectrum1D
 from jdaviz import Cubeviz
 
+import warnings
 
 class JWST_DataProduct():
     """ The parent class for all JWST data products. Contains attributes and
@@ -815,9 +816,11 @@ class SpectralDataCube(JWST_DataProduct):
                 wavelength_array =  wavelengths
 
         else:  # If wavelengths not given, extract spectral axis from data cube
-            spec_data = Spectrum1D(flux=self.cube*u.Jy/u.sr,wcs=self.wcs)
-            wavelength_array = spec_data.spectral_axis
-            wavelength_array = wavelength_array.to(u.micron).value # Convert array to microns
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")  # Supress warnings that spectral axis is not last
+                spec_data = Spectrum1D(flux=self.cube*u.Jy/u.sr,wcs=self.wcs)
+                wavelength_array = spec_data.spectral_axis
+                wavelength_array = wavelength_array.to(u.micron).value # Convert array to microns
 
         self.spectral_axis = wavelength_array
 
@@ -940,13 +943,15 @@ class SpectralDataCube(JWST_DataProduct):
             cube_array = np.swapaxes(cube_array, 1, 2) # This swaps the axes at indices 1 and 2
            
            # Load spectral data from data cube
-            spectral_data = Spectrum1D(flux=cube_array, wcs=self.wcs)
-            cubeviz = Cubeviz()
-            cubeviz.load_data(spectral_data, data_label='Full Spectrum')  # Load spectral data into Cubeviz
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")  # Supress warnings that spectral axis is not last
+                spectral_data = Spectrum1D(flux=cube_array, wcs=self.wcs)
+                cubeviz = Cubeviz()
+                cubeviz.load_data(spectral_data, data_label='Full Spectrum')  # Load spectral data into Cubeviz
 
             # Extract spectrum from region within the aperture
             cubeviz.load_regions([aperture]) 
-            spectrum = cubeviz.specviz.get_spectra()         # Extracted spectrum
+            spectrum = cubeviz.specviz.get_spectra(apply_slider_redshift=False)  # Extracted spectrum
             spectrum_flux = spectrum["Subset 1"].flux.value  # Array of flux values
 
             return spectrum_flux
